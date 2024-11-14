@@ -1,0 +1,45 @@
+version: '3.9'
+services:
+  postgres:
+    image: ${PG_APP}
+    container_name: ${PG_HOST}
+    environment:
+      - POSTGRES_DB=${PG_DB}
+      - POSTGRES_USER=${PG_USER}
+      - POSTGRES_PASSWORD=${PG_PASS}
+    env_file: .env
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgress_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@mail.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    ports:
+      - 5050:80
+
+  mysql:
+    image: mysql:5
+    environment:
+      - MYSQL_DATABASE=store-db
+      - MYSQL_USER=root
+      - MYSQL_ROOT_PASSWORD=admin1234
+      - MYSQL_PORT=3306
+    ports:
+    - 3306:3306
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin1234
+      - PMA_HOST=mysql
+    ports:
+      - 8080:80
+volumes:
+  db-volume:
+    name: pg-data
